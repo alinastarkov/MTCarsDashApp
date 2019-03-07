@@ -46,7 +46,7 @@ app.layout = html.Div(style={'backgroundColor': 'white'}, children=[
                 #initial value of xaxis
                 value='model'
             )
-        ], style={'width': '30%', 'float': 'right', 'display': 'inline-block', 'margin': '0 20% 0 0'})
+        ], style={'width': '30%', 'float': 'right', 'textAlign': 'center', 'display': 'inline-block', 'margin': '0 20% 0 0'})
     ]),
     dcc.Graph(id='mgp-w'),
      html.Div([
