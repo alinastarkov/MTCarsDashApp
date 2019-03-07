@@ -6,7 +6,7 @@ import plotly.graph_objs as go
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 
-
+#read the data
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
 df = pd.read_csv('mtcars.csv')
@@ -27,18 +27,23 @@ app.layout = html.Div(style={'backgroundColor': 'white'}, children=[
             'color': '#1B1B1C'
         }),
     html.Div([
+        #first dropdown to choose the xaxis dataset
         html.Div([
             dcc.Dropdown(
                 id='xaxis',
                 options=[{'label': i, 'value': i} for i in df.columns.values],
+                #initial value of xaxis
                 value='mpg'
             )
         ],
+        #use margin to center the dropdown
         style={'width': '30%', 'display': 'inline-block', 'textAlign': 'center', 'margin': '0 0 0 19%'}),
+        #second dropdown to choose the yaxis dataset
     html.Div([
             dcc.Dropdown(
                 id='yaxis',
                 options=[{'label': i, 'value': i} for i in df.columns.values],
+                #initial value of xaxis
                 value='model'
             )
         ], style={'width': '30%', 'float': 'right', 'display': 'inline-block', 'margin': '0 20% 0 0'})
@@ -54,21 +59,25 @@ app.layout = html.Div(style={'backgroundColor': 'white'}, children=[
     dash.dependencies.Output('mgp-w', 'figure'),
     [dash.dependencies.Input('xaxis', 'value'),
      dash.dependencies.Input('yaxis', 'value')])
+
 def update_graph(xaxis, yaxis):
     trace1=go.Scatter(
+    #choose the dataset of the automatic cars (am=0)
             x=df.query('am==0')[xaxis],
             y=df.query('am==0')[yaxis],
+            # when user hover on the markers the name of the model will appear 
             text=df['model'],
             mode='markers',
             marker={
                 'color': 'red',
                 'size': 15,
-                'opacity': 0.5,
+                'opacity': 0.6,
                 'line': {'width': 0.8, 'color': 'white'}
             },
             name='Automatic'
 
         )
+    #choose the dataset of the manual cars (am=1)
     trace2=go.Scatter(
             x=df.query('am==1')[xaxis],
             y=df.query('am==1')[yaxis],
@@ -77,7 +86,7 @@ def update_graph(xaxis, yaxis):
             marker={
                 'color': 'blue',
                 'size': 15,
-                'opacity': 0.5,
+                'opacity': 0.6,
                 'line': {'width': 0.8, 'color': 'white'}
             },
             name='Manual'
@@ -89,6 +98,7 @@ def update_graph(xaxis, yaxis):
                 height=450,
                 xaxis={'type': 'log', 'title': xaxis},
                 yaxis={'title': yaxis},
+                # big left margin => the model name catagory requires more space
                 margin={'l': 160, 'b': 40, 't': 10, 'r': 10},
                 legend={'x': 0, 'y': 1},
                 hovermode='closest')
