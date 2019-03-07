@@ -10,6 +10,8 @@ external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
 df = pd.read_csv('mtcars.csv')
+print(df['gear'].value_counts()
+)
 
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
@@ -20,23 +22,30 @@ app.layout = html.Div(style={'backgroundColor': 'white'}, children=[
             'textAlign': 'center',
             'color': '#1B1B1C'
         }),
+      html.H2(children="Please choose the x-axis and the y-axis category", style={
+            'font-family': 'helvetica',
+            'textAlign': 'center',
+            'color': '#1B1B1C'
+        }),
     html.Div([
+        html.Div([
             dcc.Dropdown(
                 id='xaxis',
                 options=[{'label': i, 'value': i} for i in df.columns.values],
                 value='mpg'
             )
         ],
-        style={'width': '30%', 'display': 'inline-block'}),
+        style={'width': '30%', 'display': 'inline-block', 'textAlign': 'center', 'margin': '0 0 0 19%'}),
     html.Div([
             dcc.Dropdown(
                 id='yaxis',
                 options=[{'label': i, 'value': i} for i in df.columns.values],
-                value='wt'
+                value='model'
             )
-        ],
-        style={'width': '30%', 'display': 'inline-block',  'float': 'left'}),
-    dcc.Graph(id='mgp-w')
+        ], style={'width': '30%', 'float': 'right', 'display': 'inline-block', 'margin': '0 20% 0 0'})
+    ]),
+    dcc.Graph(id='mgp-w'),
+    
 ])
 
 @app.callback(
@@ -54,16 +63,18 @@ def update_graph(xaxis, yaxis):
             marker={
                 'size': 15,
                 'opacity': 0.5,
-                'line': {'width': 0.5, 'color': 'white'}
+                'line': {'width': 0.8, 'color': 'white'}
             }
         )],
             'layout': go.Layout(
+                height=450,
                 xaxis={'type': 'log', 'title': xaxis},
                 yaxis={'title': yaxis},
-                margin={'l': 40, 'b': 40, 't': 10, 'r': 10},
+                margin={'l': 160, 'b': 40, 't': 10, 'r': 10},
                 legend={'x': 0, 'y': 1},
-                hovermode='closest'        )
+                hovermode='closest')
     }
+
 
 if __name__ == '__main__':
     app.run_server(debug=True)
